@@ -1,4 +1,8 @@
-import gui
+try:
+	import gui
+except:
+	import gui2 as gui
+	print "Falling back to Gtk2"
 
 
 def main():

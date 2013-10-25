@@ -1,6 +1,8 @@
+from PIL import Image
 
 
-class Camera(object):
+cameras = {}
+class LocalCamera(object):
 	VIDEOCAPTUREDEVICECAMERA = 0
 	OPENCVCAMERA = 1
 	"""docstring for Camera"""
@@ -16,11 +18,20 @@ class Camera(object):
 			except Exception, e:
 				pass
 			pass
+
 		if self.cameraType == -1:
 			raise ImportError("Can not load a library to access camera.")
 
+
 		self.number = number
 		self.__camera = False
+
+	def __del__(self):
+		for camera in cameras:
+			try:
+				camera.release()
+			except:
+				pass
 
 	def getImage(self):
 		if self.cameraType == self.VIDEOCAPTUREDEVICECAMERA:
@@ -29,10 +40,57 @@ class Camera(object):
 				self.__camera = Device(self.number)
 			return self.__camera.getImage()
 		elif self.cameraType == self.OPENCVCAMERA:
-			import cv2.cv
-			self.__camera = cv.CaptureFromCAM(0)
-			rawFrame = cv.QueryFrame(self.__camera)
-			return rawFrame
+			import cv2
+			if not self.__camera:
+				if not cameras:
+					self.getAvailableCameras()
+				self.__camera = cameras[0]
+				print "__camera", self.__camera
+			(success, rawFrame) = self.__camera.read()
+			if success:
+				pilImage = Image.fromarray(rawFrame)
+				return pilImage
+			else:
+				raise Exception("Camera Read did not work because")
+
+	@staticmethod
+	def getAvailableCameras():
+		cams = {}
+		try:
+			from VideoCapture import Device
+			device = True
+			i = 0
+			while device:
+				print "trying ", i
+				try:
+					device = Device(i)
+					cams.update({i: device.dev.getdisplayname()})
+				except:
+					device = None
+				i+=1
+		except:
+			try:
+				import cv2.cv
+				device = True
+				i = 0
+				while device:
+					if i in cameras:
+						cams.update({i: "/dev/video" + str(i)})
+					else:
+						print "trying ", i
+						device = cv2.VideoCapture(i)
+						if device.isOpened():
+							(s, f) = device.read()
+							print "read: ", s
+							cams.update({i: "/dev/video" + str(i)})
+							cameras.update({i: device})
+						else:
+							device = None
+					i+=1
+			except:
+				pass
+		
+		return cams
 
 
 class NetworkCamera(object):

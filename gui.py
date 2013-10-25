@@ -1,87 +1,99 @@
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from cam import NetworkCamera
-from emailer import Mailer
-from PIL import Image
-from StringIO import StringIO
+from gi.repository import Gdk
+from gi.repository import GObject
+# from cam import NetworkCamera
+# from emailer import Mailer
+# from PIL import Image
+# from StringIO import StringIO
+from guiFrame import GUI
+import threading
 
-class Handler:
-	def __init__(self):
-		self.bufferedPic = None
-		self.emailer = None
-		self.camera = None
-		self.lblEmailStatus = builder.get_object("lblEmailStatus")
-		self.txtEmailServer = builder.get_object("txtEmailServer")
-		self.txtEmailPort = builder.get_object("txtEmailPort")
-		self.txtEmailUsername = builder.get_object("txtEmailUsername")
-		self.txtEmailPassword = builder.get_object("txtEmailPassword")
-		self.swtEmailUseTLS = builder.get_object("swtEmailUseTLS")
+class MainGUI(GUI):
+    def __init__(self):
+        Gdk.threads_init()
+        super(MainGUI, self).__init__()
+        builder = Gtk.Builder()
+        builder.add_from_file("mainGtk3.glade")
+        builder.connect_signals(self)
 
-	def onDeleteWindow(self, *args):
-		Gtk.main_quit(*args)
+        window = builder.get_object("windowMain")
+        window.show_all()
 
-	def btnUpdate(self, button):
-		print "updating.."
-		buff = StringIO()
-		img = cam.getImage()
-		self.bufferedPic = img
-		img.thumbnail((320, 240), Image.ANTIALIAS)
-		img.save(buff, "png")
-		contents = buff.getvalue()
-		buff.close()
+        self.Gtk = Gtk
+        self.lblEmailStatus = builder.get_object("lblEmailStatus")
+        self.txtEmailServer = builder.get_object("txtEmailServer")
+        self.txtEmailPort = builder.get_object("txtEmailPort")
+        self.txtEmailUsername = builder.get_object("txtEmailUsername")
+        self.txtEmailPassword = builder.get_object("txtEmailPassword")
+        self.swtEmailUseTLS = builder.get_object("swtEmailUseTLS")
+        self.imgPreview = builder.get_object("imgPreview")
+        self.lblCameraStatus = builder.get_object("lblCameraStatus")
+        self.cmbCameraType = builder.get_object("cmbCameraType")
+        self.cmbCameraLocalNumber = builder.get_object("cmbCameraLocalNumber")
+        self.tblCameraNetwork = builder.get_object("tblCameraNetwork")
+        self.tblCameraLocal = builder.get_object("tblCameraLocal")
+        self.txtCameraServerURL = builder.get_object("txtCameraServerURL")
+        self.txtCameraUsername = builder.get_object("txtCameraUsername")
+        self.txtCameraPassword = builder.get_object("txtCameraPassword")
+        self.prbPreview = builder.get_object("prbPreview")
 
-		loader = GdkPixbuf.PixbufLoader.new_with_type('png')
-		loader.write(contents)
-		pixbuf = loader.get_pixbuf()
-		loader.close()
+        cameraTypesStore = Gtk.ListStore(str)
+        cameraTypesStore.append(["Network"])
+        cameraTypesStore.append(["Local"])
 
-		image = builder.get_object("image1")
-		image.set_from_pixbuf(pixbuf)
+        self.cmbCameraType.set_model(cameraTypesStore)
+        self.cmbCameraType.set_active(0)
 
-	def btnSendEmail(self, button):
-		if self.bufferedPic:
-			buff = StringIO()
-			self.bufferedPic.save(buff, format="jpeg")
-			buffStr = buff.getvalue()
-			buff.close()
-			email.sendMail("beau0307@d.umn.edu", ["123.jonathan@gmail.com"], "test attachment", "test", [("test.jpg", buffStr)])
-		else:
-			print "No Image: Take an Image"
+        cell = Gtk.CellRendererText()
+        self.cmbCameraType.pack_start(cell, True)
+        self.cmbCameraType.add_attribute(cell, "text", 0)
 
-	def btnEmailConnect(self, button):
-		print "Trying to connect to email server."
-		self.lblEmailStatus.set_text("Connecting...")
+        super(MainGUI, self).setDefaults()
+        self.setDefaults()
 
-		server = self.txtEmailServer.get_text()
-		port = self.txtEmailPort.get_text()
-		username = self.txtEmailUsername.get_text()
-		password = self.txtEmailPassword.get_text()
-		useTLS = self.swtEmailUseTLS.get_active()
+        self.timeout_id = GObject.timeout_add(50, self.on_timeout, None)
 
-		try:
-			self.emailer = Mailer(server, port, username=username, password=password, useTLS=useTLS)
-			self.emailer.tryConnection()
-		except:
-			self.lblEmailStatus.set_text("Connection with server failed.")
-			self.emailer = None
-			return
+    def setDefaults(self):
+        CameraNumberModel = self.Gtk.ListStore(str, int)
+        self.cmbCameraLocalNumber.set_model(CameraNumberModel)
+        cell = Gtk.CellRendererText()
+        self.cmbCameraLocalNumber.pack_start(cell, True)
+        self.cmbCameraLocalNumber.add_attribute(cell, "text", 0)
 
-		try:
-			self.emailer.tryLogin()
-		except:
-			self.lblEmailStatus.set_text("Login Failed.")
-			self.emailer = None
-			return
+    def pilImageToPixbuf(self, img):
+        import StringIO
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        buff = StringIO.StringIO()
+        img.save(buff, 'ppm')
+        contents = buff.getvalue()
+        buff.close()
+        loader = GdkPixbuf.PixbufLoader.new_with_type('pnm')
+        loader.write(contents)
+        pixbuf = loader.get_pixbuf()
+        loader.close()
+        return pixbuf
 
-		self.lblEmailStatus.set_text("Connection .")
+    def on_timeout(self, user_data):
+        """
+        Update value on the progress bar
+        """
+        if self.prbPreviewPulsing:
+            self.prbPreview.pulse()
+        else:
+            self.prbPreview.set_fraction(0)
 
+        return True
+
+    def btnUpdateClicked(self, widget, data=None):
+        print "starting new thread"
+        self.prbPreviewPulsing = True
+        threading.Thread(target=super(MainGUI, self).btnUpdateClicked, args=(widget, data)).start()
 
 def run():
-	builder = Gtk.Builder()
-	builder.add_from_file("main.glade")
-	builder.connect_signals(Handler())
-
-	window = builder.get_object("windowMain")
-	window.show_all()
-	Gtk.main()
-	print "Done."
+    MainGUI()
+    Gdk.threads_enter()
+    Gtk.main()
+    Gdk.threads_leave()
+    print "Done."
