@@ -3,8 +3,8 @@ from PIL import Image
 
 cameras = {}
 class LocalCamera(object):
-	VIDEOCAPTUREDEVICECAMERA = 0
-	OPENCVCAMERA = 1
+	VIDEOCAPTUREDEVICECAMERA = 1
+	OPENCVCAMERA = 2
 	"""docstring for Camera"""
 	def __init__(self, number=0):
 		self.cameraType = -1
@@ -37,14 +37,14 @@ class LocalCamera(object):
 		if self.cameraType == self.VIDEOCAPTUREDEVICECAMERA:
 			from VideoCapture import Device
 			if not self.__camera:
-				self.__camera = Device(self.number)
+				self.__camera = cameras[self.number]
 			return self.__camera.getImage()
 		elif self.cameraType == self.OPENCVCAMERA:
 			import cv2
 			if not self.__camera:
 				if not cameras:
 					self.getAvailableCameras()
-				self.__camera = cameras[0]
+				self.__camera = cameras[self.number]
 				print "__camera", self.__camera
 			(success, rawFrame) = self.__camera.read()
 			if success:
@@ -61,12 +61,17 @@ class LocalCamera(object):
 			device = True
 			i = 0
 			while device:
-				print "trying ", i
-				try:
-					device = Device(i)
-					cams.update({i: device.dev.getdisplayname()})
-				except:
-					device = None
+
+				if i in cameras:
+					cams.update({i: cameras[i].dev.getdisplayname()})
+				else:
+					print "trying ", i
+					try:
+						device = Device(i)
+						cams.update({i: device.dev.getdisplayname()})
+						cameras.update({i: device})
+					except:
+						device = None
 				i+=1
 		except:
 			try:

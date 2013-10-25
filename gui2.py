@@ -51,6 +51,10 @@ class MainGUI(GUI):
         self.prbPreview = self.wTree.get_widget("prbPreview")
 
         super(MainGUI, self).setDefaults()
+        self.setDefaults()
+
+    def setDefaults(self):
+        self.cmbCameraType.set_active(0)
 
     def run(self):
         gtk.gdk.threads_enter()

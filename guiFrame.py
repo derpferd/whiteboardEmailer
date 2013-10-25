@@ -124,14 +124,3 @@ class GUI(object):
         print "Reloading local Cameras"
         self.cameras = LocalCamera.getAvailableCameras()
         self.reloadLocalCameraCmb()
-
-
-# def run():
-#   builder = Gtk.Builder()
-#   builder.add_from_file("main.glade")
-#   builder.connect_signals(Handler())
-
-#   window = builder.get_object("windowMain")
-#   window.show_all()
-#   Gtk.main()
-#   print "Done."
