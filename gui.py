@@ -2,12 +2,9 @@ from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import Gdk
 from gi.repository import GObject
-# from cam import NetworkCamera
-# from emailer import Mailer
-# from PIL import Image
-# from StringIO import StringIO
 from guiFrame import GUI
 import threading
+
 
 class MainGUI(GUI):
     def __init__(self):
@@ -21,6 +18,7 @@ class MainGUI(GUI):
         window.show_all()
 
         self.Gtk = Gtk
+        self.GObject = GObject
         self.lblEmailStatus = builder.get_object("lblEmailStatus")
         self.txtEmailServer = builder.get_object("txtEmailServer")
         self.txtEmailPort = builder.get_object("txtEmailPort")
@@ -52,8 +50,6 @@ class MainGUI(GUI):
         super(MainGUI, self).setDefaults()
         self.setDefaults()
 
-        self.timeout_id = GObject.timeout_add(50, self.on_timeout, None)
-
     def setDefaults(self):
         CameraNumberModel = self.Gtk.ListStore(str, int)
         self.cmbCameraLocalNumber.set_model(CameraNumberModel)
@@ -74,17 +70,6 @@ class MainGUI(GUI):
         pixbuf = loader.get_pixbuf()
         loader.close()
         return pixbuf
-
-    def on_timeout(self, user_data):
-        """
-        Update value on the progress bar
-        """
-        if self.prbPreviewPulsing:
-            self.prbPreview.pulse()
-        else:
-            self.prbPreview.set_fraction(0)
-
-        return True
 
     def btnUpdateClicked(self, widget, data=None):
         print "starting new thread"

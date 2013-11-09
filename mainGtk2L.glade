@@ -97,6 +97,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="btnSendEmailClicked" swapped="no"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -219,6 +220,7 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -234,6 +236,7 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -251,6 +254,7 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -269,6 +273,7 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -285,6 +290,7 @@
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -300,11 +306,12 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_action_appearance">False</property>
-                    <signal name="clicked" handler="btnEmailConnect" swapped="no"/>
+                    <signal name="clicked" handler="btnEmailConnectClicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -328,6 +335,161 @@
                 <property name="fill">True</property>
                 <property name="padding">5</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkTable" id="table2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="n_rows">5</property>
+                <property name="n_columns">2</property>
+                <child>
+                  <widget class="GtkLabel" id="label20">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">To:</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label21">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">From:</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="txtEmailFrom">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="txtEmailTo">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label22">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Subject:</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="txtEmailSubject">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text" translatable="yes">Whiteboard Picture</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="txtEmailBody">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text" translatable="yes">Picture of Whiteboard</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Body</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label24">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Image Name</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="txtEmailImageName">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text" translatable="yes">whiteboard</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>
@@ -388,6 +550,7 @@
                     <property name="items" translatable="yes">Network
 Local</property>
                     <signal name="changed" handler="cmbCameraTypeChanged" swapped="no"/>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">True</property>
@@ -410,6 +573,7 @@ Local</property>
                 <property name="border_width">5</property>
                 <property name="n_rows">4</property>
                 <property name="n_columns">2</property>
+                <property name="row_spacing">2</property>
                 <child>
                   <widget class="GtkLabel" id="label12">
                     <property name="visible">True</property>
@@ -440,7 +604,7 @@ Local</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="txtCameraServer">
+                  <widget class="GtkEntry" id="txtCameraServerURL">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
@@ -448,6 +612,8 @@ Local</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                    <signal name="changed" handler="settingTextChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -463,6 +629,8 @@ Local</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
+                    <signal name="changed" handler="settingTextChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -481,6 +649,7 @@ Local</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="settingChanged" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -501,18 +670,116 @@ Local</property>
                   <packing>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="lblCameraNetworkStatus">
+                  <widget class="GtkTable" id="tblCameraNetworkStatus">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="n_rows">4</property>
+                    <property name="n_columns">2</property>
+                    <child>
+                      <widget class="GtkImage" id="imgCameraReachedServer">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-remove</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label16">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Reached server</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkImage" id="imgCameraLoggedIn">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-remove</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkImage" id="imgCameraServerHasImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-remove</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label17">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Logged In</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label18">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Server has image</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkImage" id="imgCameraImageIsValid">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-remove</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label19">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Image is Valid</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
+                    <property name="x_padding">5</property>
+                    <property name="y_padding">2</property>
                   </packing>
                 </child>
               </widget>
@@ -544,7 +811,7 @@ Local</property>
                   <widget class="GtkComboBox" id="cmbCameraLocalNumber">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="items" translatable="yes"/>
+                    <property name="items" translatable="yes"></property>
                     <signal name="changed" handler="cmbCameraLocalNumberChanged" swapped="no"/>
                   </widget>
                   <packing>
@@ -552,7 +819,7 @@ Local</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                     <property name="x_padding">10</property>
                   </packing>
                 </child>
@@ -584,7 +851,17 @@ Local</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <widget class="GtkProgressBar" id="prbCamera">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="show_text">True</property>
+                <property name="text" translatable="yes"> </property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">4</property>
+              </packing>
             </child>
           </widget>
           <packing>
